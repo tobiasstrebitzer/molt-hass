@@ -1,0 +1,1 @@
+# Moltbot Home Assistant Plugin

@@ -1,0 +1,45 @@
+{
+  "name": "molt-hass",
+  "version": "1.0.0",
+  "description": "Moltbot Home Assistant Integration",
+  "main": "build/index.js",
+  "type": "module",
+  "keywords": [
+    "moltbot",
+    "plugin",
+    "automation"
+  ],
+  "author": "Tobias Strebitzer <tobias.strebitzer@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf build",
+    "build": "tsc -p tsconfig.src.json",
+    "lint": "eslint 'src/**/*.ts' && tsc -p tsconfig.src.json --noEmit",
+    "prepack": "pnpm clean && pnpm build"
+  },
+  "dependencies": {
+    "@mariozechner/pi-agent-core": "0.49.3",
+    "@sinclair/typebox": "0.34.47",
+    "change-case": "^5.4.4",
+    "home-assistant-js-websocket": "^9.6.0",
+    "json-schema": "^0.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@stylistic/eslint-plugin": "^5.7.1",
+    "@types/node": "^20.0.0",
+    "@vitest/ui": "^2.1.8",
+    "eslint": "^9.39.2",
+    "moltbot": "link:../../../Library/pnpm/global/5/node_modules/moltbot",
+    "rimraf": "^6.1.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.54.0",
+    "vitest": "^2.1.8"
+  },
+  "clawdbot": {
+    "extensions": [
+      "./build/index.js"
+    ]
+  }
+}

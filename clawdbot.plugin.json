@@ -1,0 +1,10 @@
+{
+  "id": "molt-hass",
+  "name": "Home Assistant",
+  "description": "Moltbot Home Assistant Integration",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}

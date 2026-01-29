@@ -1,0 +1,9 @@
+.vscode
+src
+test
+eslint.config.mjs
+pnpm-workspace.yaml
+tsconfig.json
+tsconfig.src.json
+tsconfig.test.json
+tsconfig.tsbuildinfo
