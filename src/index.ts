@@ -1,4 +1,4 @@
-import { Type } from '@sinclair/typebox/type'
+import { Type } from '@sinclair/typebox'
 import type { MoltbotPluginDefinition } from 'moltbot/types'
 import { HAClient } from './lib/HAClient.js'
 import { PluginConfig } from './types/PluginConfig.js'
