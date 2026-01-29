@@ -2,7 +2,7 @@ import { Type } from '@sinclair/typebox'
 import type { MoltbotPluginDefinition } from 'moltbot/types'
 import { HAClient } from './lib/HAClient.js'
 import { PluginConfig } from './types/PluginConfig.js'
-import { emptyPluginConfigSchema } from './util/config.js'
+import { parseConfig } from './util/config.js'
 import { toolResult } from './util/tool.js'
 
 interface RunActionParams {
@@ -16,11 +16,28 @@ const plugin: MoltbotPluginDefinition = {
   id: 'molt-hass',
   name: 'Home Assistant',
   description: 'Moltbot Home Assistant Integration',
-  configSchema: emptyPluginConfigSchema(),
+  configSchema: {
+    parse(value: unknown): Partial<PluginConfig> {
+      const raw = value && typeof value === 'object' && !Array.isArray(value) ? (value as Partial<PluginConfig>) : {}
+      return { url: raw.url, accessToken: raw.accessToken }
+    },
+    uiHints: {
+      url: {
+        label: 'Home Assistant URL',
+        help: 'URL to Home Assistant',
+        placeholder: 'http://localhost:8123'
+      },
+      accessToken: {
+        label: 'Access Token',
+        help: 'Home Assistant Long Lived Access Token',
+        sensitive: true
+      }
+    }
+  },
   register(api) {
-    const config = api.config.plugins?.entries?.['molt-hass']?.config as PluginConfig | undefined
-    if (!config?.url) { throw new Error('Missing HASS config url (plugins.entries.molt-hass.config.url)') }
-    const client = new HAClient({ url: config.url, accessToken: config.accessToken })
+    const { url, accessToken } = parseConfig(api.config)
+    if (!accessToken) { return }
+    const client = new HAClient({ url, accessToken })
 
     api.registerTool({
       name: 'ha:actions_list',

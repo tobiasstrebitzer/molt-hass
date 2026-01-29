@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import { existsSync, mkdirSync } from 'fs'
-import { Auth, callService, configColl, Connection, createConnection, createLongLivedTokenAuth, entitiesColl, getAuth, HassConfig, HassEntities, HassServices, MessageBase, servicesColl } from 'home-assistant-js-websocket'
+import { Auth, callService, configColl, Connection, createConnection, createLongLivedTokenAuth, entitiesColl, HassConfig, HassEntities, HassServices, MessageBase, servicesColl } from 'home-assistant-js-websocket'
 import { JSONSchema7 } from 'json-schema'
 import { join } from 'path'
 import { HAAction, HAActionDef } from '../types/HAActionDef.js'
@@ -25,7 +25,7 @@ export interface HAClientReadyEvent {
 
 export interface HAClientOptions {
   url: string
-  accessToken?: string
+  accessToken: string
   cacheDir?: string
 }
 
@@ -36,8 +36,7 @@ interface HAClientEventMap {
 }
 
 async function getAsyncAuth(options: HAClientOptions): Promise<Auth> {
-  if (options.accessToken) { return createLongLivedTokenAuth(options.url, options.accessToken) }
-  return getAuth({ hassUrl: options.url })
+  return createLongLivedTokenAuth(options.url, options.accessToken)
 }
 
 export class HAClient extends EventEmitter<HAClientEventMap> {

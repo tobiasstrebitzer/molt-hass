@@ -2,9 +2,17 @@
   "id": "molt-hass",
   "name": "Home Assistant",
   "description": "Moltbot Home Assistant Integration",
-  "configSchema": {
+  "configSchemaX": {
     "type": "object",
     "additionalProperties": false,
     "properties": {}
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "url": { "type": "string" },
+      "accessToken": { "type": "string" }
+    }
   }
 }

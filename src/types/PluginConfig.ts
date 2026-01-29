@@ -1,4 +1,4 @@
 export interface PluginConfig {
-  url?: string
+  url: string
   accessToken?: string
 }
