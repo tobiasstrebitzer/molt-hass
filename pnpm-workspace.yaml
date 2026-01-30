@@ -1,6 +1,5 @@
 onlyBuiltDependencies:
   - esbuild
-  - protobufjs
 
 overrides:
-  moltbot: link:../../../../Library/pnpm/global/5/node_modules/moltbot
+  openclaw: link:../../../Library/pnpm/global/5/node_modules/openclaw

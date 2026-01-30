@@ -1,1 +1,1 @@
-# Moltbot Home Assistant Plugin
+# OpenClaw Home Assistant Plugin

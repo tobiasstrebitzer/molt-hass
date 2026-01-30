@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AgentTool } from '@mariozechner/pi-agent-core'
 import { readFileSync } from 'fs'
-import type { MoltbotPluginApi, MoltbotPluginDefinition, MoltbotPluginService } from 'moltbot/types'
+import type { OpenClawPluginApi, OpenClawPluginDefinition, OpenClawPluginService } from 'openclaw/types'
 
 export interface StubContext {
-  api: MoltbotPluginApi
-  config: MoltbotPluginApi['config']
+  api: OpenClawPluginApi
+  config: OpenClawPluginApi['config']
   tools: Record<string, AgentTool<any, unknown>>
   stop: () => Promise<void>
 }
 
-export async function createStubContext(plugin: MoltbotPluginDefinition): Promise<StubContext> {
-  let config: MoltbotPluginApi['config'] = JSON.parse(readFileSync('test/config.json', 'utf-8'))
-  const services: MoltbotPluginService[] = []
+export async function createStubContext(plugin: OpenClawPluginDefinition): Promise<StubContext> {
+  let config: OpenClawPluginApi['config'] = JSON.parse(readFileSync('test/config.json', 'utf-8'))
+  const services: OpenClawPluginService[] = []
   const tools: Record<string, AgentTool<any, unknown>> = {}
-  const api: MoltbotPluginApi = {
-    id: 'molt-hass',
+  const api: OpenClawPluginApi = {
+    id: 'claw-hass',
     logger: console,
     name: 'Home Assistant',
-    source: '/Users/atomic/projects/ai/molt/molt-hass/src/index.ts',
+    source: '/Users/atomic/projects/ai/claw-hass/src/index.ts',
     on() { },
     registerChannel: () => { },
     registerCli: () => { },
@@ -35,14 +35,14 @@ export async function createStubContext(plugin: MoltbotPluginDefinition): Promis
       version: '2026.1.26',
       config: { loadConfig: () => config, writeConfigFile: async (value) => { config = value } },
       logging: { shouldLogVerbose: () => true, getChildLogger: () => console },
-      state: { resolveStateDir: () => process.env.MOLTBOT_STATE_DIR! },
+      state: { resolveStateDir: () => process.env.OPENCLAW_STATE_DIR! },
       channel: null!,
       media: null!,
       system: null!,
       tools: null!,
       tts: null!
     },
-    description: 'Moltbot Home Assistant Integration',
+    description: 'OpenClaw Home Assistant Integration',
     version: '1.0.0',
     config
   }

@@ -12,9 +12,9 @@
     "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
     "outputCapture": "std",
     "env": {
-      "MOLTBOT_STATE_DIR": "/Users/atomic/.clawdbot",
-      "MOLTBOT_CONFIG_PATH": "/Users/atomic/.clawdbot/moltbot.json",
-      "CLAWDBOT_GATEWAY_TOKEN": "7ebbe46f3ad2fc251218ccb2562f46b3cf2a39d141dff55b"
+      "OPENCLAW_STATE_DIR": "/Users/atomic/.openclaw",
+      "OPENCLAW_CONFIG_PATH": "/Users/atomic/.openclaw/openclaw.json",
+      "OPENCLAW_GATEWAY_TOKEN": "7ebbe46f3ad2fc251218ccb2562f46b3cf2a39d141dff55b"
     }
   }, {
     "type": "node",
@@ -24,9 +24,9 @@
     "program": "${workspaceFolder}/test/api.ts",
     "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
     "env": {
-      "MOLTBOT_STATE_DIR": "/Users/atomic/.clawdbot",
-      "MOLTBOT_CONFIG_PATH": "/Users/atomic/.clawdbot/moltbot.json",
-      "CLAWDBOT_GATEWAY_TOKEN": "7ebbe46f3ad2fc251218ccb2562f46b3cf2a39d141dff55b"
+      "OPENCLAW_STATE_DIR": "/Users/atomic/.openclaw",
+      "OPENCLAW_CONFIG_PATH": "/Users/atomic/.openclaw/openclaw.json",
+      "OPENCLAW_GATEWAY_TOKEN": "7ebbe46f3ad2fc251218ccb2562f46b3cf2a39d141dff55b"
     }
   }, {
     "type": "node",

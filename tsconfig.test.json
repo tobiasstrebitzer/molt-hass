@@ -12,5 +12,5 @@
     "declaration": true
   },
   "include": ["src/**/*.ts", "test/**/*.ts"],
-  "exclude": ["node_modules", "../moltbot/src"]
+  "exclude": ["node_modules", "../openclaw/src"]
 }

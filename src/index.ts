@@ -1,5 +1,5 @@
 import { Type } from '@sinclair/typebox'
-import type { MoltbotPluginDefinition } from 'moltbot/types'
+import type { OpenClawPluginDefinition } from 'openclaw/types'
 import { HAClient } from './lib/HAClient.js'
 import { PluginConfig } from './types/PluginConfig.js'
 import { parseConfig } from './util/config.js'
@@ -12,10 +12,10 @@ interface RunActionParams {
   data: string
 }
 
-const plugin: MoltbotPluginDefinition = {
-  id: 'molt-hass',
+const plugin: OpenClawPluginDefinition = {
+  id: 'claw-hass',
   name: 'Home Assistant',
-  description: 'Moltbot Home Assistant Integration',
+  description: 'OpenClaw Home Assistant Integration',
   configSchema: {
     parse(value: unknown): Partial<PluginConfig> {
       const raw = value && typeof value === 'object' && !Array.isArray(value) ? (value as Partial<PluginConfig>) : {}
@@ -42,11 +42,11 @@ const plugin: MoltbotPluginDefinition = {
     api.registerService({
       id: 'hass-ws',
       async start(ctx) {
-        ctx.logger.info('[molt-hass] starting service')
+        ctx.logger.info('[claw-hass] starting service')
         await client.start()
       },
       async stop(ctx) {
-        ctx.logger.info('[molt-hass] stopping service')
+        ctx.logger.info('[claw-hass] stopping service')
         await client.destroy()
       }
     })

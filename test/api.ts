@@ -1,6 +1,6 @@
 import plugin from '../src/index.js'
 import { timeout } from '../src/util/promise.js'
-import { createStubContext } from './helpers/moltbot.js'
+import { createStubContext } from './helpers/openclaw.js'
 
 async function main() {
   const context = await createStubContext(plugin)
