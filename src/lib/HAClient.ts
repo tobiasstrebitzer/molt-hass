@@ -40,12 +40,19 @@ async function getAsyncAuth(options: HAClientOptions): Promise<Auth> {
 }
 
 export class HAClient extends EventEmitter<HAClientEventMap> {
+  private static instance?: HAClient
+
   private connection$: Promise<Connection>
   private configCollection: WrappedCollection<HassConfig>
   private servicesCollection: WrappedCollection<HassServices>
   private entitiesCollection: WrappedCollection<HassEntities>
 
   ready: Promise<HAClientReadyEvent>
+
+  static getInstance(options: HAClientOptions) {
+    if (!this.instance) { this.instance = new HAClient(options) }
+    return this.instance
+  }
 
   constructor(private options: HAClientOptions) {
     super()

@@ -35,9 +35,10 @@ const plugin: MoltbotPluginDefinition = {
     }
   },
   register(api) {
-    const { url, accessToken } = parseConfig(api.config)
-    if (!accessToken) { return }
-    const client = new HAClient({ url, accessToken })
+    const config = parseConfig(api.config)
+    if (!config) { return }
+
+    const client = HAClient.getInstance(config)
 
     api.registerTool({
       name: 'ha:actions_list',

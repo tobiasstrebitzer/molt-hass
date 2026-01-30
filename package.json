@@ -1,6 +1,6 @@
 {
   "name": "molt-hass",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Moltbot Home Assistant Integration",
   "main": "build/index.js",
   "type": "module",
