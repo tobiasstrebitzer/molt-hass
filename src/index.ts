@@ -37,8 +37,19 @@ const plugin: MoltbotPluginDefinition = {
   register(api) {
     const config = parseConfig(api.config)
     if (!config) { return }
-
     const client = HAClient.getInstance(config)
+
+    api.registerService({
+      id: 'hass-ws',
+      async start(ctx) {
+        ctx.logger.info('[molt-hass] starting service')
+        await client.start()
+      },
+      async stop(ctx) {
+        ctx.logger.info('[molt-hass] stopping service')
+        await client.destroy()
+      }
+    })
 
     api.registerTool({
       name: 'ha:actions_list',

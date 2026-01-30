@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import { existsSync, mkdirSync } from 'fs'
-import { Auth, callService, configColl, Connection, createConnection, createLongLivedTokenAuth, entitiesColl, HassConfig, HassEntities, HassServices, MessageBase, servicesColl } from 'home-assistant-js-websocket'
+import { Auth, configColl, Connection, createConnection, createLongLivedTokenAuth, entitiesColl, HassConfig, HassEntities, HassServices, MessageBase, servicesColl } from 'home-assistant-js-websocket'
 import { JSONSchema7 } from 'json-schema'
 import { join } from 'path'
 import { HAAction, HAActionDef } from '../types/HAActionDef.js'
@@ -42,12 +42,10 @@ async function getAsyncAuth(options: HAClientOptions): Promise<Auth> {
 export class HAClient extends EventEmitter<HAClientEventMap> {
   private static instance?: HAClient
 
-  private connection$: Promise<Connection>
-  private configCollection: WrappedCollection<HassConfig>
-  private servicesCollection: WrappedCollection<HassServices>
-  private entitiesCollection: WrappedCollection<HassEntities>
-
-  ready: Promise<HAClientReadyEvent>
+  private connection$?: Promise<Connection>
+  private configCollection?: WrappedCollection<HassConfig>
+  private servicesCollection?: WrappedCollection<HassServices>
+  private entitiesCollection?: WrappedCollection<HassEntities>
 
   static getInstance(options: HAClientOptions) {
     if (!this.instance) { this.instance = new HAClient(options) }
@@ -56,22 +54,26 @@ export class HAClient extends EventEmitter<HAClientEventMap> {
 
   constructor(private options: HAClientOptions) {
     super()
-    this.connection$ = getAsyncAuth(options).then((auth) => createConnection({ auth }))
+  }
+
+  start() {
+    this.connection$ = getAsyncAuth(this.options).then((auth) => createConnection({ auth }))
     this.configCollection = wrapCollection(this.connection$.then(configColl), (state) => this.emit('config', state), this.cache('config'))
     this.servicesCollection = wrapCollection(this.connection$.then(servicesColl), (state) => this.emit('services', state), this.cache('services'))
     this.entitiesCollection = wrapCollection(this.connection$.then(entitiesColl), (state) => this.emit('entities', state), this.cache('entities'))
-    this.ready = Promise.all([
+    return Promise.all([
       this.configCollection.promise,
       this.servicesCollection.promise,
       this.entitiesCollection.promise
     ]).then<HAClientReadyEvent>(([config, services, entities]) => ({ config, services, entities }))
   }
 
-  get config() { return this.configCollection.value }
-  get services() { return this.servicesCollection.value }
-  get entities() { return this.entitiesCollection.value }
+  get config() { return this.configCollection!.value }
+  get services() { return this.servicesCollection!.value }
+  get entities() { return this.entitiesCollection!.value }
 
   async sendMessage<T>(data: MessageBase) {
+    if (!this.connection$) { throw new Error('Service not connected') }
     const connection = await this.connection$
     return connection.sendMessagePromise<T>(data)
   }
@@ -83,11 +85,6 @@ export class HAClient extends EventEmitter<HAClientEventMap> {
 
   async runAction(params: HAAction) {
     return this.runSequence([params])
-  }
-
-  async callServiceLight(entityId: string, service: 'turn_on' | 'turn_off', data: object = {}) {
-    const connection = await this.connection$
-    return callService(connection, 'light', service, data, { entity_id: entityId })
   }
 
   getFrontendTranslations(category: string, language = 'en-GB'): Promise<HATranslations> {
@@ -139,7 +136,6 @@ export class HAClient extends EventEmitter<HAClientEventMap> {
   }
 
   async listActions(serviceIds?: string[]) {
-    await this.ready
     const { resources } = await this.getFrontendTranslations('services')
     const manifestList = await this.getManifestList()
     const devices = await this.getDeviceRegistryList()
@@ -228,11 +224,11 @@ export class HAClient extends EventEmitter<HAClientEventMap> {
     return schema
   }
 
-  destroy() {
-    this.configCollection.unsubscribe()
-    this.servicesCollection.unsubscribe()
-    this.entitiesCollection.unsubscribe()
-    this.connection$.then((connection) => connection.close())
+  async destroy() {
+    this.configCollection?.unsubscribe()
+    this.servicesCollection?.unsubscribe()
+    this.entitiesCollection?.unsubscribe()
+    if (this.connection$) { this.connection$.then((connection) => connection.close()) }
   }
 
   private cache<T>(name: string): JsonCache<T> | undefined {
