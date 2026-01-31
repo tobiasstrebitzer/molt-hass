@@ -8,8 +8,9 @@
     "skipLibCheck": true,
     "sourceMap": false,
     "forceConsistentCasingInFileNames": true,
-    "declaration": false
+    "declaration": false,
+    "verbatimModuleSyntax": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "../openclaw/src"]
+  "exclude": ["node_modules"]
 }

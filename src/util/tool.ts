@@ -1,4 +1,4 @@
-import type { AgentToolResult } from '@mariozechner/pi-agent-core'
+import { type AgentToolResult } from '@mariozechner/pi-agent-core'
 
 export interface ToolResult {
   content: Array<{ type: string; text: string }>

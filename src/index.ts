@@ -1,7 +1,7 @@
 import { Type } from '@sinclair/typebox'
-import type { OpenClawPluginDefinition } from 'openclaw/types'
+import type { OpenClawPluginDefinition } from 'openclaw/plugin-sdk'
 import { HAClient } from './lib/HAClient.js'
-import { PluginConfig } from './types/PluginConfig.js'
+import type { PluginConfig } from './types/PluginConfig.js'
 import { parseConfig } from './util/config.js'
 import { toolResult } from './util/tool.js'
 

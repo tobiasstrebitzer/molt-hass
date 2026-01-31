@@ -5,3 +5,4 @@ coverage
 tsconfig.tsbuildinfo
 build
 test/config.json
+pnpm-workspace.yaml

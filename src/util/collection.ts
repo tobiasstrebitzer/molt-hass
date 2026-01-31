@@ -1,5 +1,5 @@
-import { Collection, UnsubscribeFunc } from 'home-assistant-js-websocket'
-import { JsonCache } from '../lib/JsonCache.js'
+import { type Collection, type UnsubscribeFunc } from 'home-assistant-js-websocket'
+import { type JsonCache } from '../lib/JsonCache.js'
 import { resolvable } from './promise.js'
 
 export interface WrappedCollection<T> {
