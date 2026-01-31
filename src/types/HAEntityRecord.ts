@@ -4,7 +4,7 @@ export interface EntityRecord {
   config_entry_id: string
   config_subentry_id: string | null
   created_at: number
-  device_id: string
+  device_id: string | null
   disabled_by: string | null
   entity_category: string | null
   entity_id: string

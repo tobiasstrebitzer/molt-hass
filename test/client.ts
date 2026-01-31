@@ -7,8 +7,13 @@ import { parseConfig } from '../src/util/config.js'
 async function main() {
   const config = parseConfig(JSON.parse(readFileSync('test/config.json', 'utf-8')))
   if (!config) { throw new Error('Config required') }
-  const client = new HAClient({ ...config, cacheDir: join(resolveConfigDir(), 'ha') })
-  const actions = await client.listActions()
+  const client = HAClient.getInstance({ ...config, cacheDir: join(resolveConfigDir(), 'ha') })
+  await client.start()
+
+  const sensors = await client.getSensors()
+  console.info({ sensors })
+
+  const actions = await client.getActions(config.services)
   console.info({ actions })
 }
 

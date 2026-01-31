@@ -12,7 +12,8 @@
     "additionalProperties": false,
     "properties": {
       "url": { "type": "string" },
-      "accessToken": { "type": "string" }
+      "accessToken": { "type": "string" },
+      "services": { "type": "array", "items": { "type": "string" } }
     }
   }
 }

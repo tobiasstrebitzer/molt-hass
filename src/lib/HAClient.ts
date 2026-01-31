@@ -135,7 +135,35 @@ export class HAClient extends EventEmitter<HAClientEventMap> {
     })
   }
 
-  async listActions(serviceIds?: string[]) {
+  async getSensors() {
+    const devices = await this.getDeviceRegistryList()
+    const deviceMap = Object.fromEntries(devices.map((device) => [device.id, device]))
+    const records = await this.getEntityRegistryList()
+    return records
+      .filter(({ entity_id, disabled_by, entity_category }) => (
+        entity_id.startsWith('sensor.') &&
+        disabled_by == null &&
+        entity_category !== 'diagnostic'
+      ))
+      .map((record) => {
+        const entity = this.entities[record.entity_id]
+        const device = record.device_id ? deviceMap[record.device_id] : undefined
+        const name = entity.attributes.friendly_name ?? record.name ?? record.original_name ?? entity.entity_id
+        return {
+          name,
+          entity_id: entity.entity_id,
+          state: entity.state,
+          attributes: JSON.stringify(entity.attributes),
+          areaId: record.area_id,
+          platform: record.platform,
+          model: device?.model,
+          modelId: device?.model_id,
+          manufacturer: device?.manufacturer
+        }
+      })
+  }
+
+  async getActions(serviceIds?: string[]) {
     const { resources } = await this.getFrontendTranslations('services')
     const manifestList = await this.getManifestList()
     const devices = await this.getDeviceRegistryList()
@@ -164,7 +192,7 @@ export class HAClient extends EventEmitter<HAClientEventMap> {
           entities: entityIds.map((entityId) => {
             const entity = this.entities[entityId]
             const record = entityRecordMap[entityId]
-            const device = deviceMap[record?.device_id]
+            const device = record.device_id ? deviceMap[record.device_id] : undefined
             const name = entity.attributes.friendly_name ?? record?.name ?? device?.name_by_user ?? device?.name
             return { entityId, name }
           })

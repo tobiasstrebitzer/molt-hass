@@ -19,13 +19,17 @@ const plugin: OpenClawPluginDefinition = {
   configSchema: {
     parse(value: unknown): Partial<PluginConfig> {
       const raw = value && typeof value === 'object' && !Array.isArray(value) ? (value as Partial<PluginConfig>) : {}
-      return { url: raw.url, accessToken: raw.accessToken }
+      return { url: raw.url, accessToken: raw.accessToken, services: raw.services }
     },
     uiHints: {
       url: {
         label: 'Home Assistant URL',
         help: 'URL to Home Assistant',
         placeholder: 'http://localhost:8123'
+      },
+      services: {
+        label: 'Services',
+        help: 'Home Assistant Service IDs'
       },
       accessToken: {
         label: 'Access Token',
@@ -52,13 +56,28 @@ const plugin: OpenClawPluginDefinition = {
     })
 
     api.registerTool({
-      name: 'ha:actions_list',
-      description: 'List all available actions',
-      label: 'List Actions',
+      name: 'ha:get_sensors',
+      description: 'Get all available sensors',
+      label: 'Get Sensors',
       parameters: Type.Object({}),
       async execute() {
         try {
-          const actions = await client.listActions(['light', 'climate', 'cover'])
+          const sensors = await client.getSensors()
+          return toolResult(sensors)
+        } catch (error) {
+          return toolResult({ error })
+        }
+      }
+    })
+
+    api.registerTool({
+      name: 'ha:get_actions',
+      description: 'Get all available actions',
+      label: 'Get Actions',
+      parameters: Type.Object({}),
+      async execute() {
+        try {
+          const actions = await client.getActions(config.services)
           return toolResult(actions)
         } catch (error) {
           return toolResult({ error })
@@ -67,7 +86,7 @@ const plugin: OpenClawPluginDefinition = {
     })
 
     api.registerTool({
-      name: 'ha:action_run',
+      name: 'ha:run_action',
       description: 'Run a specific home automation action',
       label: 'Run Action',
       parameters: Type.Object({
