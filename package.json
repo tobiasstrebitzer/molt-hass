@@ -1,6 +1,6 @@
 {
   "name": "claw-hass",
-  "version": "1.0.5",
+  "version": "1.0.0",
   "description": "OpenClaw Home Assistant Integration",
   "main": "build/index.js",
   "type": "module",
